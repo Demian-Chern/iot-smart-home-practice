@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Blockchain Wallet - Клиент</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { background: #f8f9fa; }
+        .card { margin-bottom: 20px; }
+        pre { background: #212529; color: #0f0; padding: 15px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">🔗 Blockchain Client</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Генерация кошелька -->
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5>1. Генерация кошелька</h5>
+            </div>
+            <div class="card-body">
+                <button id="generate_wallet" class="btn btn-success btn-lg">Сгенерировать новый кошелёк</button>
+
+                <div class="mt-4">
+                    <label><strong>Публичный ключ (Адрес):</strong></label>
+                    <textarea id="public_key" class="form-control" rows="3" readonly></textarea>
+                </div>
+                <div class="mt-3">
+                    <label><strong>Приватный ключ (Сохрани в безопасном месте!):</strong></label>
+                    <textarea id="private_key" class="form-control" rows="3" readonly></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Создание транзакции -->
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5>2. Создать и подписать транзакцию</h5>
+            </div>
+            <div class="card-body">
+                <form id="tx_form">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Приватный ключ отправителя:</label>
+                            <textarea name="sender_private_key" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Публичный ключ отправителя (Адрес):</label>
+                            <textarea name="sender_address" class="form-control" rows="2" required></textarea>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label>Адрес получателя:</label>
+                            <textarea name="recipient_address" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Сумма:</label>
+                            <input type="number" name="amount" class="form-control" value="10" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Подписать транзакцию</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Результат -->
+        <div class="modal fade" id="resultModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h5>Транзакция успешно подписана!</h5>
+                    </div>
+                    <div class="modal-body">
+                        <pre id="tx_result"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $('#generate_wallet').click(function() {
+            $.get('/wallet/new', function(data) {
+                $('#public_key').val(data.public_key);
+                $('#private_key').val(data.private_key);
+            });
+        });
+
+        $('#tx_form').submit(function(e) {
+            e.preventDefault();
+            $.post('/transactions/new', $(this).serialize(), function(response) {
+                $('#tx_result').text(JSON.stringify(response, null, 4));
+                $('#resultModal').modal('show');
+            });
+        });
+    </script>
+</body>
+</html>

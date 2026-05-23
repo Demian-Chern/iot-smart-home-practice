@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Node • МосПолиФизикс</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { background: #0f0f1a; color: #e0e0e0; }
+        .card { background: #1a1a2e; border: none; }
+        .block { background: #16213e; margin-bottom: 15px; border-radius: 10px; }
+        .navbar { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .hash { font-family: monospace; font-size: 0.9rem; word-break: break-all; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">🔗 Blockchain Node</a>
+            <button id="btn_mine" class="btn btn-warning btn-lg">⛏️ Запустить Майнинг</button>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Левая панель -->
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5>Добавить узлы в сеть</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="node_form">
+                            <div class="mb-3">
+                                <input type="text" name="nodes" class="form-control" placeholder="127.0.0.1:5001,127.0.0.1:5002" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Подключить ноды</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5>Консенсус сети</h5>
+                    </div>
+                    <div class="card-body">
+                        <button id="btn_resolve" class="btn btn-info w-100">🔄 Синхронизировать цепь</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Основная часть -->
+            <div class="col-lg-8">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Цепочка блоков</h4>
+                    <button id="btn_refresh" class="btn btn-outline-light">Обновить</button>
+                </div>
+
+                <div id="blocks_container"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_URL = 'http://127.0.0.1:5000';
+
+        function loadChain() {
+            $.get(`${API_URL}/chain`, function(data) {
+                let html = '';
+                data.chain.forEach(block => {
+                    let txHtml = '';
+                    if (block.transactions && block.transactions.length > 0) {
+                        block.transactions.forEach(tx => {
+                            txHtml += `
+                                <div class="mb-2 p-2 bg-dark rounded">
+                                    <small>${tx.sender.substring(0,12)}... → ${tx.recipient.substring(0,12)}... : <b>${tx.amount}</b></small>
+                                </div>`;
+                        });
+                    } else {
+                        txHtml = '<small class="text-muted">Генезис-блок</small>';
+                    }
+
+                    html += `
+                        <div class="block p-3 mb-3">
+                            <div class="d-flex justify-content-between">
+                                <h5>Блок #${block.index}</h5>
+                                <span class="badge bg-success">Proof: ${block.proof}</span>
+                            </div>
+                            <p class="hash text-break text-info mb-2">${block.previous_hash}</p>
+                            <small class="text-muted">${new Date(block.timestamp * 1000).toLocaleString()}</small>
+                            <div class="mt-3">
+                                <strong>Транзакции:</strong>
+                                ${txHtml}
+                            </div>
+                        </div>`;
+                });
+                $('#blocks_container').html(html);
+            });
+        }
+
+        // Майнинг
+        $('#btn_mine').click(() => {
+            $('#btn_mine').prop('disabled', true).text('Майнинг...');
+            $.get(`${API_URL}/mine`, function() {
+                loadChain();
+                $('#btn_mine').prop('disabled', false).text('⛏️ Запустить Майнинг');
+            }).fail(() => alert('Ошибка майнинга'));
+        });
+
+        // Обновить цепь
+        $('#btn_refresh').click(loadChain);
+
+        // Добавить ноды
+        $('#node_form').submit(function(e) {
+            e.preventDefault();
+            $.post(`${API_URL}/nodes/register`, $(this).serialize(), function() {
+                alert('Узлы успешно добавлены!');
+            });
+        });
+
+        // Консенсус
+        $('#btn_resolve').click(() => {
+            $.get(`${API_URL}/nodes/resolve`, function(res) {
+                alert(res.message);
+                loadChain();
+            });
+        });
+
+        // Автозагрузка при открытии
+        $(document).ready(() => {
+            loadChain();
+            setInterval(loadChain, 10000); // автообновление каждые 10 сек
+        });
+    </script>
+</body>
+</html>

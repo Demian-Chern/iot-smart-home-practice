@@ -1,10 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О проекте — Домашняя автоматизация IoT</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-$END$
+    <header>
+        <nav>
+            <div class="logo">🏠 IoT Smart Home</div>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="about.html" class="active">О проекте</a></li>
+                <li><a href="members.html">Участники</a></li>
+                <li><a href="journal.html">Журнал</a></li>
+                <li><a href="resources.html">Ресурсы</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>О проекте</h1>
+
+        <section class="content-section">
+            <h2>🎯 Цель</h2>
+            <p>Создать <strong>энергоэффективную, независимую от облачных зарубежных сервисов</strong> систему автоматизации жилья с гибким локальным сервером и возможностью удалённого управления для повышения комфорта, энергоэффективности и безопасности жилья.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>📋 Задачи</h2>
+            <table class="data-table">
+                <tr>
+                    <th>№</th>
+                    <th>Задача</th>
+                    <th>Статус</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Изучить протоколы передачи данных (MQTT, HTTP)</td>
+                    <td><span class="badge success">✅ Выполнено</span></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Спроектировать схему подключения периферийных устройств</td>
+                    <td><span class="badge success">✅ Выполнено</span></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Развернуть серверную часть</td>
+                    <td><span class="badge success">✅ Выполнено</span></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Протестировать отказоустойчивость при потере сети</td>
+                    <td><span class="badge warning">🔄 В процессе</span></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Создать веб-интерфейс управления</td>
+                    <td><span class="badge success">✅ Выполнено</span></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Настроить автоматические сценарии</td>
+                    <td><span class="badge success">✅ Выполнено</span></td>
+                </tr>
+            </table>
+        </section>
+
+        <section class="content-section">
+            <h2>🔥 Актуальность</h2>
+            <p>Большинство коммерческих решений зависят от зарубежных облачных провайдеров, что создаёт риски:</p>
+            <ul>
+                <li>❌ Отключение сервисов</li>
+                <li>❌ Утечка персональных данных</li>
+                <li>❌ Зависимость от интернет-соединения</li>
+            </ul>
+            <p>Наш локальный IoT-сервер решает эти проблемы:</p>
+            <ul>
+                <li>✅ Работает без интернета внутри домашней сети</li>
+                <li>✅ Гибко масштабируется под любые нужды</li>
+                <li>✅ Не требует абонентской платы</li>
+                <li>✅ Полный контроль над данными</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h2>✨ Что уже сделано</h2>
+            <ul>
+                <li>✅ Разработана структурная схема системы</li>
+                <li>✅ Закуплены и протестированы базовые датчики</li>
+                <li>✅ Поднят MQTT-брокер для обмена сообщениями</li>
+                <li>✅ Написана первая стабильная версия прошивки для контроллеров</li>
+                <li>✅ Созданы автоматические сценарии (движение → свет, температура → уведомление)</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h2>🛠️ Технологический стек</h2>
+            <div class="tech-stack">
+                <span class="tech-badge">MQTT</span>
+                <span class="tech-badge">HTTP</span>
+                <span class="tech-badge">PostgreSQL</span>
+                <span class="tech-badge">Python</span>
+                <span class="tech-badge">HTML5</span>
+                <span class="tech-badge">CSS3</span>
+                <span class="tech-badge">JavaScript</span>
+                <span class="tech-badge">Git</span>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Жуков Станислав Романович · Московский Политех</p>
+    </footer>
 </body>
 </html>
